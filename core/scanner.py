@@ -17,8 +17,23 @@ Quét toàn bộ tốc độ web:
 # -----------------------------------------------------------
 # HÀM CHÍNH DÙNG BÊN NGOÀI
 # -----------------------------------------------------------
-def scan(url: str, screenshot_path: str = None) -> dict:
-    return asyncio.run(_scan_async(url, screenshot_path))
+def scan(url: str, screenshot_path: str = None, save_to_db: bool = True) -> dict:
+    data = asyncio.run(_scan_async(url, screenshot_path))
+    if save_to_db:
+        _try_save_scan(data)
+    return data
+
+
+async def scan_async(
+    url: str, screenshot_path: str = None, save_to_db: bool = True
+) -> dict:
+    """
+    Async-friendly wrapper used when a running event loop already exists.
+    """
+    data = await _scan_async(url, screenshot_path)
+    if save_to_db:
+        _try_save_scan(data)
+    return data
 
 
 # -----------------------------------------------------------
@@ -140,3 +155,17 @@ async def _scan_async(url: str, screenshot_path: str):
         }
 
         return result
+
+
+def _try_save_scan(data: dict):
+    """
+    Persist scan result to history, but avoid breaking the scan flow
+    if the DB write fails.
+    """
+    try:
+        from core.database import save_scan
+
+        save_scan(data)
+    except Exception:
+        # ignore to keep scanning resilient
+        pass

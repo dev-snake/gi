@@ -1,5 +1,5 @@
 import asyncio
-from core.scanner import scan
+from core.scanner import scan_async
 
 
 async def _scan_one(url: str, index: int, callback_progress=None):
@@ -7,7 +7,7 @@ async def _scan_one(url: str, index: int, callback_progress=None):
     Scan 1 URL, có callback báo tiến trình lên UI.
     """
     try:
-        data = scan(url)
+        data = await scan_async(url)
         if callback_progress:
             callback_progress(index, url, "done", data)
         return data

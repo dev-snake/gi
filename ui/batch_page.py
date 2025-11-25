@@ -19,7 +19,8 @@ from core.batch import batch_scan
 # WORKER THREAD (quét không khóa UI)
 # ========================================================================
 class BatchWorker(QThread):
-    progress_signal = pyqtSignal(int, str, str, dict)
+    # Use object so we can emit None while a scan is in progress
+    progress_signal = pyqtSignal(int, str, str, object)
     finish_signal = pyqtSignal(list)
 
     def __init__(self, urls: list):
