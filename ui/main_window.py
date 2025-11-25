@@ -21,6 +21,7 @@ class MainWindow(QMainWindow):
 
         # Sidebar
         self.sidebar = QListWidget()
+        self.sidebar.setObjectName("SidebarList")
         self.sidebar.addItems(
             ["Dashboard", "Resources", "Analysis", "Compare", "History", "Batch Scan"]
         )

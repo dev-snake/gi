@@ -12,6 +12,8 @@ QListWidget {
     outline: none;
     padding: 10px;
     font-size: 16px;
+}
+QListWidget#SidebarList {
     max-width: 200px;
     min-width: 200px;
 }
